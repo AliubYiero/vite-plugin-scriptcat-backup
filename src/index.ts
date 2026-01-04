@@ -17,7 +17,7 @@ interface BackupScriptOptions {
  * 将打包脚本同时生成一份备份文件.
  */
 export default function backupScriptPlugin(
-	options: Partial<BackupScriptOptions> ={},
+	options: Partial<BackupScriptOptions> = {},
 ): Plugin {
 	// 默认配置
 	const mergedOption: BackupScriptOptions = {
@@ -38,6 +38,7 @@ export default function backupScriptPlugin(
 		 * 获取 vite-plugin-scriptcat-meta-banner 脚本导出的 UserScript
 		 */
 		buildStart( { plugins } ) {
+			if ( !Array.isArray( plugins ) ) return;
 			const metaPlugin = plugins.find( plugin => plugin.name === 'vite-plugin-scriptcat-meta-banner' );
 			if ( !metaPlugin ) return;
 			const parsedUserScript: ParseUserScript = metaPlugin.api.parsedUserScript;
