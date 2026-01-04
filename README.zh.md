@@ -96,7 +96,7 @@ try {
 
 ## 贡献指南
 
-欢迎贡献！请通过 [GitHub](https://github.com/your-username/vite-plugin-scriptcat-backup) 提交 issue 或 PR。
+欢迎贡献！请通过 [GitHub](https://github.com/AliubYiero/vite-plugin-scriptcat-backup) 提交 issue 或 PR。
 
 ## 许可证
 

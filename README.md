@@ -96,8 +96,8 @@ try {
 
 ## Contributing
 
-Contributions are welcome! Please submit issues or PRs via [GitHub](https://github.com/your-username/vite-plugin-scriptcat-backup).
+Contributions are welcome! Please submit issues or PRs via [GitHub](https://github.com/AliubYiero/vite-plugin-scriptcat-backup).
 
 ## License
 
-GPL-3 © [Author Name](https://github.com/your-username)
+GPL-3 © [AliubYiero](https://github.com/AliubYiero)
