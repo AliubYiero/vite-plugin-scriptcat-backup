@@ -1,7 +1,7 @@
 {
 	"name": "@yiero/vite-plugin-scriptcat-backup",
 	"description": "A vite plugin to backup script. ",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"type": "module",
 	"exports": {
 		".": {
