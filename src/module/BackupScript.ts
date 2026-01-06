@@ -55,8 +55,10 @@ export class BackupScript {
 	) {
 		const backupScriptPath = this.normalizeScriptPath( scriptVersion );
 		
-		// 写入脚本
+		// 写入备份脚本
 		writeFileSync( backupScriptPath, content, 'utf-8' );
+		// 写入最新脚本
+		writeFileSync( resolve( this.backupDir, `${ this.scriptName }.user.js` ), content, 'utf-8' );
 	}
 	
 	/**
