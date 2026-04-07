@@ -120,3 +120,10 @@ type UserScriptAntifeature =
 	| 'tracking'
 	| 'miner'
 	| string
+
+/**
+ * 版本映射表结构
+ * key: 版本号 (如 "1.0.0")
+ * value: 备份文件名 (如 "my-script_1.0.0.backup.js")
+ */
+export type VersionMap = Record<string, string>

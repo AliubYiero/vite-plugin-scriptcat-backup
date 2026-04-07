@@ -4,7 +4,7 @@ English / [中文](./README.zh.md)
 
 ## Features
 
-A Vite plugin for automatically backing up built ScriptCat (or TamperMonkey) userscripts. Creates backup files based on script version numbers to prevent duplicate backups of the same version.
+A Vite plugin for automatically backing up built ScriptCat (or TamperMonkey) userscripts. Compresses all backup files into a single ZIP archive and manages version tracking via JSON, preventing duplicate backups of the same version.
 
 ## Installation
 
@@ -35,7 +35,7 @@ import backupScriptPlugin from 'vite-plugin-scriptcat-backup'
 export default defineConfig({
   plugins: [
     // Other plugins...
-    
+
     backupScriptPlugin({
       backupDir: './script-backups',
       scriptName: 'my-script'
@@ -69,16 +69,29 @@ The plugin performs the following operations during the build process:
 
 1. Attempts to get script version information from the `vite-plugin-scriptcat-meta-banner` plugin
 2. If meta-banner plugin is not found, extracts `@version` metadata from the built script code
-3. Checks if a backup already exists for the script version
+3. Checks if a backup already exists via `versions.json`
 4. Throws a `BackupExistError` if backup already exists
-5. Saves the script code to the backup directory if no backup exists
+5. Writes the latest script to `${scriptName}.user.js`
+6. Extracts existing ZIP archive (if any), adds new backup file, then recompresses
+7. Updates `versions.json` with the new version entry
 
-**Backup File Naming Format:**
+## Backup Directory Structure
+
 ```
-<scriptName>_<version>.backup.js
+./backup/
+├── versions.json           # Version map: {"1.0.0": "my-script_1.0.0.backup.js"}
+├── my-script.user.js       # Latest script (always updated)
+└── my-script.zip           # All backup scripts compressed
+    ├── my-script_1.0.0.backup.js
+    ├── my-script_1.0.1.backup.js
+    └── ...
 ```
 
-Example: `my-script_1.0.0.backup.js`
+| File | Description |
+|------|-------------|
+| `versions.json` | JSON mapping of version numbers to backup filenames |
+| `${scriptName}.user.js` | Latest script copy for easy access |
+| `${scriptName}.zip` | ZIP archive containing all historical backups |
 
 ## Error Handling
 

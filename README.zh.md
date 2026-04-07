@@ -4,7 +4,7 @@
 
 ## 功能
 
-一个 Vite 插件，用于自动备份构建后的 ScriptCat（或 TamperMonkey）用户脚本。根据脚本版本号创建备份文件，避免重复备份同一版本。
+一个 Vite 插件，用于自动备份构建后的 ScriptCat（或 TamperMonkey）用户脚本。将所有备份文件压缩为单个 ZIP 归档，并通过 JSON 管理版本追踪，避免重复备份同一版本。
 
 ## 安装
 
@@ -35,7 +35,7 @@ import backupScriptPlugin from 'vite-plugin-scriptcat-backup'
 export default defineConfig({
   plugins: [
     // 其他插件...
-    
+
     backupScriptPlugin({
       backupDir: './script-backups',
       scriptName: 'my-script'
@@ -69,16 +69,29 @@ export default defineConfig({
 
 1. 尝试从 `vite-plugin-scriptcat-meta-banner` 插件获取脚本版本信息
 2. 如果没有找到 meta-banner 插件，则从构建输出的脚本代码中提取 `@version` 元数据
-3. 根据脚本版本号检查是否已存在备份文件
-4. 如果备份文件已存在，则抛出 `BackupExistError` 错误
-5. 如果备份文件不存在，则将脚本代码保存到备份目录
+3. 通过 `versions.json` 检查是否已存在备份
+4. 如果备份已存在，则抛出 `BackupExistError` 错误
+5. 写入最新脚本到 `${scriptName}.user.js`
+6. 解压现有 ZIP 归档（如存在），添加新备份文件后重新压缩
+7. 更新 `versions.json` 添加新版本记录
 
-**备份文件命名格式：**
+## 备份目录结构
+
 ```
-<scriptName>_<version>.backup.js
+./backup/
+├── versions.json           # 版本映射: {"1.0.0": "my-script_1.0.0.backup.js"}
+├── my-script.user.js       # 最新脚本（始终更新）
+└── my-script.zip           # 所有备份脚本压缩包
+    ├── my-script_1.0.0.backup.js
+    ├── my-script_1.0.1.backup.js
+    └── ...
 ```
 
-例如：`my-script_1.0.0.backup.js`
+| 文件 | 描述 |
+|------|------|
+| `versions.json` | 版本号到备份文件名的 JSON 映射 |
+| `${scriptName}.user.js` | 最新脚本副本，便于快速访问 |
+| `${scriptName}.zip` | 包含所有历史备份的 ZIP 压缩包 |
 
 ## 错误处理
 
